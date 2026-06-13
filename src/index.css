@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Instrument Sans", system-ui, sans-serif;
+
+  --color-rail-navy: #0f1b2d;
+  --color-rail-deep: #162436;
+  --color-rail-panel: #1e3048;
+  --color-rail-accent: #3d8b7a;
+  --color-rail-accent-light: #5cb8a4;
+  --color-rail-cream: #f4efe6;
+  --color-rail-warm: #e8dcc8;
+  --color-rail-muted: #8fa3b8;
+  --color-rail-track: #c45c3e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-rail-navy);
+  color: var(--color-rail-cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+.leaflet-container {
+  background: #1a2838;
+  font-family: var(--font-body);
+}
+
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgba(15, 27, 45, 0.75) !important;
+  color: var(--color-rail-muted) !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-rail-accent-light) !important;
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+.train-marker {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
