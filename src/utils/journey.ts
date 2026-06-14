@@ -27,6 +27,31 @@ export function estimateJourneyMinutes(from: Station, to: Station): number {
   return Math.max(15, Math.min(180, minutes))
 }
 
+/**
+ * Pick the station whose estimated rail journey from `origin` is closest to
+ * `minutes`. Used by the interactive focus-duration control so the chosen time
+ * drives which destination the train heads for.
+ */
+export function nearestStationByMinutes(
+  origin: Station,
+  minutes: number,
+  stations: Station[],
+): Station | null {
+  let best: Station | null = null
+  let bestDiff = Infinity
+
+  for (const s of stations) {
+    if (s.crs === origin.crs) continue
+    const diff = Math.abs(estimateJourneyMinutes(origin, s) - minutes)
+    if (diff < bestDiff) {
+      bestDiff = diff
+      best = s
+    }
+  }
+
+  return best
+}
+
 export function interpolatePosition(
   from: Station,
   to: Station,

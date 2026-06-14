@@ -49,6 +49,29 @@ body {
   color: var(--color-rail-accent-light) !important;
 }
 
+.station-picker-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.station-picker-pin--active {
+  transform: scale(1.08);
+}
+
+.leaflet-tooltip.station-picker-tooltip {
+  background: rgba(15, 27, 45, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: var(--color-rail-cream) !important;
+  font-family: var(--font-body) !important;
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+.leaflet-tooltip.station-picker-tooltip::before {
+  border-top-color: rgba(15, 27, 45, 0.95) !important;
+}
 
 .map-train-marker {
   background: transparent !important;

@@ -9,6 +9,7 @@ interface StationSelectorProps {
   onChange: (station: Station) => void
   exclude?: Station | null
   placeholder?: string
+  onOpen?: () => void
 }
 
 export function StationSelector({
@@ -17,6 +18,7 @@ export function StationSelector({
   onChange,
   exclude,
   placeholder = 'Search stations…',
+  onOpen,
 }: StationSelectorProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -53,7 +55,10 @@ export function StationSelector({
 
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          onOpen?.()
+          setOpen((o) => !o)
+        }}
         className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-rail-deep/80 px-4 py-3.5 text-left transition hover:border-rail-accent/40 hover:bg-rail-panel/80"
       >
         <MapPin className="h-4 w-4 shrink-0 text-rail-accent-light" />
