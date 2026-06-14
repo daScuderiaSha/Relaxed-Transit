@@ -27,12 +27,6 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
     onStart({ from, to, durationMinutes: duration })
   }
 
-  function swapStations() {
-    setFrom(to)
-    setTo(from)
-    setCustomDuration(null)
-  }
-
   return (
     <div className="flex min-h-full flex-col items-center justify-center px-4 py-10">
       <div className="mb-10 text-center">
@@ -60,17 +54,6 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
               }}
               exclude={to}
             />
-
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={swapStations}
-                className="rounded-lg border border-white/10 px-3 py-1 text-xs text-rail-muted transition hover:border-rail-accent/40 hover:text-rail-cream"
-                aria-label="Swap stations"
-              >
-                ⇅ Swap
-              </button>
-            </div>
 
             <StationSelector
               label="Arriving at"

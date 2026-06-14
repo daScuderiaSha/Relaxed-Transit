@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet
 import L from 'leaflet'
 import type { Station } from '../types/station'
 import { interpolatePosition } from '../utils/journey'
+import { routeBearingDegrees, trainBirdseyeMarkup } from './TrainSprite'
 import 'leaflet/dist/leaflet.css'
 
 interface JourneyMapProps {
@@ -19,7 +20,7 @@ function FitBounds({ from, to }: { from: Station; to: Station }) {
       [from.lat, from.lng],
       [to.lat, to.lng],
     ).pad(0.35)
-    map.fitBounds(bounds, { animate: true })
+    map.fitBounds(bounds, { animate: false })
   }, [map, from, to])
 
   return null
@@ -48,18 +49,13 @@ function createStationIcon(label: string, variant: 'origin' | 'destination') {
   })
 }
 
-function createTrainIcon() {
+function createTrainIcon(bearing: number) {
   return L.divIcon({
-    className: 'train-marker',
+    className: 'map-train-marker',
     html: `
-      <div style="
-        width:36px;height:36px;border-radius:50%;
-        background:linear-gradient(135deg,#5cb8a4,#3d8b7a);
-        border:3px solid #f4efe6;
-        display:flex;align-items:center;justify-content:center;
-        box-shadow:0 4px 16px rgba(61,139,122,0.5);
-        font-size:18px;
-      ">🚆</div>
+      <div class="map-train-wrap" style="transform: rotate(${bearing}deg);">
+        ${trainBirdseyeMarkup()}
+      </div>
     `,
     iconSize: [36, 36],
     iconAnchor: [18, 18],
@@ -76,17 +72,17 @@ export function JourneyMap({ from, to, progress }: JourneyMapProps) {
   )
 
   const trainPos = interpolatePosition(from, to, progress)
+  const bearing = routeBearingDegrees(from.lat, from.lng, to.lat, to.lng)
+
+  const trainIcon = useMemo(() => createTrainIcon(bearing), [bearing])
+
   const completedRoute: [number, number][] = useMemo(() => {
-    const points: [number, number][] = [[from.lat, from.lng]]
-    for (let i = 1; i <= 20; i++) {
-      const t = (progress * 20) / 20
-      if (i / 20 <= t) {
-        points.push(interpolatePosition(from, to, i / 20))
-      }
-    }
-    if (progress > 0) points.push(trainPos)
-    return points
-  }, [from, to, progress, trainPos])
+    if (progress <= 0) return [[from.lat, from.lng]]
+    return [
+      [from.lat, from.lng],
+      trainPos,
+    ]
+  }, [from, progress, trainPos])
 
   const center = interpolatePosition(from, to, 0.5)
 
@@ -129,7 +125,7 @@ export function JourneyMap({ from, to, progress }: JourneyMapProps) {
           position={[to.lat, to.lng]}
           icon={createStationIcon(to.crs, 'destination')}
         />
-        <Marker position={trainPos} icon={createTrainIcon()} />
+        <Marker position={trainPos} icon={trainIcon} zIndexOffset={1000} />
       </MapContainer>
     </div>
   )

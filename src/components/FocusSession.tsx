@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Pause, Play, RotateCcw, Square, Train } from 'lucide-react'
+import { Pause, Play, RotateCcw, Square } from 'lucide-react'
 import { JourneyMap } from './JourneyMap'
+import { TrainSprite, BulletTrainIcon } from './TrainSprite'
 import type { Journey, SessionStatus } from '../types/station'
 import { formatDuration } from '../utils/journey'
 
@@ -52,7 +53,7 @@ export function FocusSession({ journey, onEnd }: FocusSessionProps) {
 
         <div className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-rail-navy/80 to-transparent p-4 lg:p-6">
           <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-rail-navy/70 px-3 py-1.5 text-xs font-medium backdrop-blur-sm">
-            <span className="h-2 w-2 rounded-full bg-rail-accent-light animate-pulse" />
+            <BulletTrainIcon className="h-3 w-9" />
             {status === 'running' && 'In transit'}
             {status === 'paused' && 'Paused at station'}
             {status === 'complete' && 'Arrived'}
@@ -82,26 +83,36 @@ export function FocusSession({ journey, onEnd }: FocusSessionProps) {
               <span>{Math.round(progress * 100)}%</span>
               <span>{to.crs}</span>
             </div>
-            <div className="relative h-2 overflow-hidden rounded-full bg-rail-panel">
+            <div className="relative h-5">
+              <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 overflow-hidden rounded-full bg-rail-panel progress-track">
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#0d6b52]/80 to-[#5cb8a4] transition-[width] duration-1000 ease-linear"
+                  style={{ width: `${Math.max(progress * 100, 0)}%` }}
+                />
+              </div>
               <div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-rail-accent to-rail-accent-light transition-all duration-1000 ease-linear"
-                style={{ width: `${progress * 100}%` }}
-              />
-              <div
-                className="absolute top-1/2 -translate-y-1/2 transition-all duration-1000 ease-linear"
-                style={{ left: `calc(${progress * 100}% - 8px)` }}
+                className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[left] duration-1000 ease-linear"
+                style={{ left: `${progress * 100}%` }}
               >
-                <Train className="h-4 w-4 text-rail-cream drop-shadow" />
+                <TrainSprite className="h-4 w-12" />
               </div>
             </div>
           </div>
 
           {/* Timer */}
           <div className="mb-8 text-center">
+            <div className="mb-3 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-rail-panel/50 px-3 py-1.5">
+              <BulletTrainIcon className="h-3.5 w-10" />
+              <span className="text-xs font-medium text-rail-muted">
+                {status === 'running' && 'In transit'}
+                {status === 'paused' && 'Paused at station'}
+                {status === 'complete' && 'Arrived at destination'}
+              </span>
+            </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-rail-muted">
               {status === 'complete' ? 'Journey complete' : 'Time remaining'}
             </p>
-            <p className="mt-2 font-display text-6xl font-bold tabular-nums tracking-tight text-rail-cream">
+            <p className="font-timer mt-2 text-[4.5rem] font-semibold leading-none text-rail-cream sm:text-7xl">
               {status === 'complete' ? '00:00' : formatDuration(remaining)}
             </p>
             <p className="mt-2 text-sm text-rail-muted">
