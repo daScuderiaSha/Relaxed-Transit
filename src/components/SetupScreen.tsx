@@ -17,9 +17,9 @@ interface SetupScreenProps {
 }
 
 const MIN_DURATION = 3
-const MAX_DURATION = 180
+const MAX_DURATION = 480
 const DURATION_STEP = 1
-const DURATION_PRESETS = [15, 25, 45, 60, 90, 120]
+const DURATION_PRESETS = [15, 30, 60, 120, 180]
 
 const INITIAL_FROM = UK_STATIONS.find((s) => s.crs === 'PAD') ?? UK_STATIONS[0]
 const INITIAL_DURATION = 45

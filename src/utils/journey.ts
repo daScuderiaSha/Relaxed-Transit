@@ -28,7 +28,7 @@ export function haversineDistanceKm(a: Station, b: Station): number {
 export function estimateJourneyMinutes(from: Station, to: Station): number {
   const km = haversineDistanceKm(from, to)
   const minutes = Math.round(2 + (km / 80) * 60)
-  return Math.max(3, Math.min(180, minutes))
+  return Math.max(3, Math.min(480, minutes))
 }
 
 /**
